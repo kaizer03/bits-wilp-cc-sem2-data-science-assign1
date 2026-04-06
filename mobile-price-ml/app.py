@@ -576,6 +576,27 @@ def insight_card(icon, title, value, desc, color):
     </div>"""
 
 
+# ── Widget callbacks ──────────────────────────────────────────────────────────
+# Callbacks fire BEFORE the next script rerun, so session state writes are safe
+# even though the widget keys will be instantiated moments later.
+
+def _apply_preset():
+    """Called when the preset selectbox changes."""
+    preset_name = st.session_state["preset_selector"]
+    if preset_name != "Custom" and PRESETS.get(preset_name):
+        for k, v in PRESETS[preset_name].items():
+            st.session_state[f"inp_{k}"] = v
+    st.session_state["_last_preset"] = preset_name
+
+
+def _reset_to_defaults():
+    """Called when the Reset button is clicked."""
+    for k, v in DEFAULTS.items():
+        st.session_state[f"inp_{k}"] = v
+    st.session_state["preset_selector"] = "Custom"
+    st.session_state["_last_preset"] = "Custom"
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # SIDEBAR
 # ─────────────────────────────────────────────────────────────────────────────
@@ -669,19 +690,13 @@ st.markdown("""
 # ─────────────────────────────────────────────────────────────────────────────
 preset_col, _ = st.columns([2, 5])
 with preset_col:
-    selected_preset = st.selectbox(
+    st.selectbox(
         "Demo Preset",
         options=list(PRESETS.keys()),
         key="preset_selector",
+        on_change=_apply_preset,
         help="Load a predefined device profile to auto-populate all inputs.",
     )
-
-# When preset changes, push values into session state before inputs render
-if selected_preset != st.session_state["_last_preset"]:
-    if selected_preset != "Custom" and PRESETS[selected_preset] is not None:
-        for k, v in PRESETS[selected_preset].items():
-            st.session_state[f"inp_{k}"] = v
-    st.session_state["_last_preset"] = selected_preset
 
 st.markdown(
     "<hr style='border:none;border-top:1px solid rgba(34,211,238,0.07);margin:0.8rem 0 1rem;'>",
@@ -781,14 +796,7 @@ btn1, btn2, btn3 = st.columns([3, 1, 3])
 with btn1:
     predict_clicked = st.button("🚀 Run Prediction Engine", use_container_width=True)
 with btn2:
-    reset_clicked = st.button("↺ Reset", use_container_width=True)
-
-if reset_clicked:
-    for k, v in DEFAULTS.items():
-        st.session_state[f"inp_{k}"] = v
-    st.session_state["preset_selector"] = "Custom"
-    st.session_state["_last_preset"]    = "Custom"
-    st.rerun()
+    st.button("↺ Reset", use_container_width=True, on_click=_reset_to_defaults)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PREDICTION SECTION  (rendered only after clicking Predict)
