@@ -82,7 +82,7 @@ Assignment 1/
 ├── Mobile_Price_Prediction_train.csv    # Raw training data
 ├── Mobile_Price_Prediction_test.csv     # Raw test data
 └── mobile-price-ml/
-    ├── Group 2.ipynb                    # Main analysis notebook
+    ├── Group 13.ipynb                    # Main analysis notebook
     ├── app.py                           # Streamlit deployment app
     ├── Mobile_Price_Prediction_train.csv
     ├── Mobile_Price_Prediction_test.csv
@@ -91,7 +91,7 @@ Assignment 1/
 
 ---
 
-## Notebook Workflow (`Group 2.ipynb`)
+## Notebook Workflow (`Group 13.ipynb`)
 
 The notebook is organised into the following sections:
 
@@ -143,7 +143,7 @@ pip install numpy pandas scikit-learn matplotlib seaborn streamlit joblib notebo
 ### 3. Run the notebook
 
 ```bash
-jupyter notebook "Group 2.ipynb"
+jupyter notebook "Group 13.ipynb"
 ```
 
 Run all cells top-to-bottom. This will train the models and save the best model as `mobile_price_model.pkl`.
@@ -173,5 +173,5 @@ The app accepts phone specifications as inputs, computes derived features, and r
 ## Submission
 
 Per assignment guidelines, only two files were submitted via Taxila:
-- `Group 2.ipynb` — Jupyter notebook with all outputs
-- `Group 2.html` / `Group 2.pdf` — Rendered output of the notebook
+- `Group 13.ipynb` — Jupyter notebook with all outputs
+- `Group 13.html` / `Group 13.pdf` — Rendered output of the notebook
