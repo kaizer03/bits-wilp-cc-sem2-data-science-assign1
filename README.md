@@ -6,7 +6,7 @@
 
 ---
 
-## Group 2 — Members
+## Group 13 — Members
 
 | Name | ID |
 |------|----|
