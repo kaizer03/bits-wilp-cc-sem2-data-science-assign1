@@ -83,7 +83,8 @@ Assignment 1/
 ├── Mobile_Price_Prediction_test.csv     # Raw test data
 └── mobile-price-ml/
     ├── Group 13.ipynb                    # Main analysis notebook
-    ├── app.py                           # Streamlit deployment app
+    ├── advanced-ui-prediction.py        # Streamlit app — advanced dashboard
+    ├── simple-ui-prediction.py          # Streamlit app — basic prediction UI
     ├── Mobile_Price_Prediction_train.csv
     ├── Mobile_Price_Prediction_test.csv
     └── venv/                            # Python virtual environment (git-ignored)
@@ -152,7 +153,7 @@ Run all cells top-to-bottom. This will train the models and save the best model 
 
 ```bash
 cd "Assignment 1/mobile-price-ml"
-streamlit run app.py
+streamlit run advanced-ui-prediction.py
 ```
 
 The app accepts phone specifications as inputs, computes derived features, and returns the predicted price range class using the saved Random Forest model.

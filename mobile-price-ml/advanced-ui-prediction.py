@@ -433,7 +433,7 @@ try:
 except FileNotFoundError:
     st.error(
         "⚠️ Model file `mobile_price_model.pkl` not found. "
-        "Ensure it is in the same directory as `app.py` and re-run `streamlit run app.py`."
+        "Ensure it is in the same directory as `advanced-ui-prediction.py` and re-run `streamlit run advanced-ui-prediction.py`."
     )
     st.stop()
 
