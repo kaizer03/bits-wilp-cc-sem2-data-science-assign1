@@ -428,13 +428,15 @@ st.markdown("""
 # ─────────────────────────────────────────────────────────────────────────────
 # LOAD MODEL
 # ─────────────────────────────────────────────────────────────────────────────
+import train as _train
+
 try:
+    if not __import__("os").path.exists("mobile_price_model.pkl"):
+        with st.spinner("Training model for the first time — this takes ~10 seconds…"):
+            _train.train_and_save()
     model = joblib.load("mobile_price_model.pkl")
-except FileNotFoundError:
-    st.error(
-        "⚠️ Model file `mobile_price_model.pkl` not found. "
-        "Ensure it is in the same directory as `advanced-ui-prediction.py` and re-run `streamlit run advanced-ui-prediction.py`."
-    )
+except Exception as _e:
+    st.error(f"⚠️ Could not load or train the model: {_e}")
     st.stop()
 
 # ─────────────────────────────────────────────────────────────────────────────
