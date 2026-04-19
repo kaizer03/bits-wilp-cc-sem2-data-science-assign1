@@ -18,10 +18,18 @@ JUPYTER     := $(VENV)/bin/jupyter
 WORKDIR     := mobile-price-ml
 
 DEPS        := numpy pandas scikit-learn matplotlib seaborn streamlit joblib notebook
-NOTEBOOK_LOG := mobile-price-ml/jupyter.log
-NOTEBOOK_PID := mobile-price-ml/.jupyter.pid
+NOTEBOOK_LOG  := mobile-price-ml/jupyter.log
+NOTEBOOK_PID  := mobile-price-ml/.jupyter.pid
+ADVANCED_LOG  := mobile-price-ml/advanced-ui.log
+ADVANCED_PID  := mobile-price-ml/.advanced-ui.pid
+SIMPLE_LOG    := mobile-price-ml/simple-ui.log
+SIMPLE_PID    := mobile-price-ml/.simple-ui.pid
 
-.PHONY: help venv install setup notebook stop-notebook advanced-ui-prediction simple-ui-prediction export-pdf activate
+.PHONY: help venv install setup \
+        notebook stop-notebook \
+        advanced-ui-prediction stop-advanced-ui-prediction \
+        simple-ui-prediction stop-simple-ui-prediction \
+        export-pdf activate
 
 # Default target — print available commands
 help:
@@ -33,8 +41,10 @@ help:
 	@echo "  make install    Install all required packages into the venv"
 	@echo "  make notebook       Launch Jupyter Notebook in background (Group 13.ipynb)"
 	@echo "  make stop-notebook  Stop the background Jupyter Notebook server"
-	@echo "  make advanced-ui-prediction  Run advanced-ui-prediction.py via Streamlit — Mobile Price Intelligence Dashboard"
-	@echo "  make simple-ui-prediction   Run simple-ui-prediction.py  via Streamlit — Mobile Price Prediction (basic)"
+	@echo "  make advanced-ui-prediction       Run advanced-ui-prediction.py in background via Streamlit"
+	@echo "  make stop-advanced-ui-prediction  Stop the background advanced Streamlit app"
+	@echo "  make simple-ui-prediction         Run simple-ui-prediction.py  in background via Streamlit"
+	@echo "  make stop-simple-ui-prediction    Stop the background simple Streamlit app"
 	@echo "  make export-pdf     Export notebook to HTML (open in browser → Print → Save as PDF)"
 	@echo "  make activate       Print the command to activate the venv manually"
 	@echo "  ──────────────────────────────────────────────────────────"
@@ -69,14 +79,16 @@ notebook:
 		echo "Run 'make stop-notebook' first, or open http://localhost:8888 in your browser."; \
 	else \
 		echo "Starting Jupyter Notebook in the background..."; \
-		cd $(WORKDIR) && nohup ../$(JUPYTER) notebook "Group 13.ipynb" \
-			--no-browser --port=8888 \
-			> ../$(NOTEBOOK_LOG) 2>&1 & echo $$! > ../$(NOTEBOOK_PID); \
-		sleep 2; \
+		nohup sh -c 'cd $(WORKDIR) && exec ../$(JUPYTER) notebook "Group 13.ipynb" --no-browser --port=8888' \
+			> $(NOTEBOOK_LOG) 2>&1 & echo $$! > $(NOTEBOOK_PID); \
+		sleep 4; \
 		echo "Jupyter Notebook started (PID $$(cat $(NOTEBOOK_PID)))."; \
-		echo "Open your browser at:  http://localhost:8888"; \
-		echo "Log file:              $(NOTEBOOK_LOG)"; \
-		echo "Stop with:             make stop-notebook"; \
+		echo ""; \
+		echo "  Open URL (with token) — copy this into any browser:"; \
+		echo "  $$(grep -o 'http://localhost:[0-9]*/[^ ]*token=[^ ]*' $(NOTEBOOK_LOG) | head -1)"; \
+		echo ""; \
+		echo "Log file:  $(NOTEBOOK_LOG)"; \
+		echo "Stop with: make stop-notebook"; \
 	fi
 
 # Stop the background Jupyter Notebook server
@@ -91,15 +103,61 @@ stop-notebook:
 		rm -f "$(NOTEBOOK_PID)"; \
 	fi
 
-# Run advanced-ui-prediction.py via Streamlit — advanced Mobile Price Intelligence Dashboard
+# Run advanced-ui-prediction.py in the background via Streamlit
 advanced-ui-prediction:
-	@echo "Starting Streamlit → advanced-ui-prediction.py (Mobile Price Intelligence Dashboard)..."
-	cd $(WORKDIR) && ../$(STREAMLIT) run advanced-ui-prediction.py
+	@if [ -f "$(ADVANCED_PID)" ] && kill -0 $$(cat "$(ADVANCED_PID)") 2>/dev/null; then \
+		echo "Advanced UI is already running (PID $$(cat $(ADVANCED_PID)))."; \
+		echo "Run 'make stop-advanced-ui-prediction' first, or open http://localhost:8501 in your browser."; \
+	else \
+		echo "Starting Streamlit → advanced-ui-prediction.py in the background..."; \
+		nohup sh -c 'cd $(WORKDIR) && exec ../$(STREAMLIT) run advanced-ui-prediction.py --server.port 8501 --server.headless true' \
+			> $(ADVANCED_LOG) 2>&1 & echo $$! > $(ADVANCED_PID); \
+		sleep 2; \
+		echo "Advanced UI started (PID $$(cat $(ADVANCED_PID)))."; \
+		echo "Open your browser at:  http://localhost:8501"; \
+		echo "Log file:              $(ADVANCED_LOG)"; \
+		echo "Stop with:             make stop-advanced-ui-prediction"; \
+	fi
 
-# Run simple-ui-prediction.py via Streamlit — basic Mobile Price Prediction app
+# Stop the background advanced Streamlit app
+stop-advanced-ui-prediction:
+	@if [ -f "$(ADVANCED_PID)" ] && kill -0 $$(cat "$(ADVANCED_PID)") 2>/dev/null; then \
+		echo "Stopping advanced-ui-prediction.py (PID $$(cat $(ADVANCED_PID)))..."; \
+		kill $$(cat "$(ADVANCED_PID)"); \
+		rm -f "$(ADVANCED_PID)"; \
+		echo "Advanced UI stopped."; \
+	else \
+		echo "No running advanced UI found."; \
+		rm -f "$(ADVANCED_PID)"; \
+	fi
+
+# Run simple-ui-prediction.py in the background via Streamlit
 simple-ui-prediction:
-	@echo "Starting Streamlit → simple-ui-prediction.py (Mobile Price Prediction)..."
-	cd $(WORKDIR) && ../$(STREAMLIT) run simple-ui-prediction.py
+	@if [ -f "$(SIMPLE_PID)" ] && kill -0 $$(cat "$(SIMPLE_PID)") 2>/dev/null; then \
+		echo "Simple UI is already running (PID $$(cat $(SIMPLE_PID)))."; \
+		echo "Run 'make stop-simple-ui-prediction' first, or open http://localhost:8502 in your browser."; \
+	else \
+		echo "Starting Streamlit → simple-ui-prediction.py in the background..."; \
+		nohup sh -c 'cd $(WORKDIR) && exec ../$(STREAMLIT) run simple-ui-prediction.py --server.port 8502 --server.headless true' \
+			> $(SIMPLE_LOG) 2>&1 & echo $$! > $(SIMPLE_PID); \
+		sleep 2; \
+		echo "Simple UI started (PID $$(cat $(SIMPLE_PID)))."; \
+		echo "Open your browser at:  http://localhost:8502"; \
+		echo "Log file:              $(SIMPLE_LOG)"; \
+		echo "Stop with:             make stop-simple-ui-prediction"; \
+	fi
+
+# Stop the background simple Streamlit app
+stop-simple-ui-prediction:
+	@if [ -f "$(SIMPLE_PID)" ] && kill -0 $$(cat "$(SIMPLE_PID)") 2>/dev/null; then \
+		echo "Stopping simple-ui-prediction.py (PID $$(cat $(SIMPLE_PID)))..."; \
+		kill $$(cat "$(SIMPLE_PID)"); \
+		rm -f "$(SIMPLE_PID)"; \
+		echo "Simple UI stopped."; \
+	else \
+		echo "No running simple UI found."; \
+		rm -f "$(SIMPLE_PID)"; \
+	fi
 
 # Export notebook to HTML — bypasses XeLaTeX entirely, avoiding PDF conversion errors
 # Open the generated HTML in your browser and use File > Print > Save as PDF
