@@ -431,10 +431,10 @@ st.markdown("""
 import train as _train
 
 try:
-    if not __import__("os").path.exists("mobile_price_model.pkl"):
+    if not __import__("os").path.exists(_train.MODEL_PATH):
         with st.spinner("Training model for the first time — this takes ~10 seconds…"):
             _train.train_and_save()
-    model = joblib.load("mobile_price_model.pkl")
+    model = joblib.load(_train.MODEL_PATH)
 except Exception as _e:
     st.error(f"⚠️ Could not load or train the model: {_e}")
     st.stop()
