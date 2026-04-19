@@ -20,15 +20,17 @@ TRAIN_CSV  = "Mobile_Price_Prediction_train.csv"
 def train_and_save():
     df = pd.read_csv(TRAIN_CSV)
 
-    # Encode binary categorical columns
-    le = LabelEncoder()
-    for col in ["blue", "dual_sim", "touch_screen", "wifi"]:
-        if df[col].dtype == object:
-            df[col] = le.fit_transform(df[col])
-
     # Encode ordinal feature mobile_wt (string → integer) if needed
     if df["mobile_wt"].dtype == object:
         df["mobile_wt"] = df["mobile_wt"].map({"Low": 1, "Med": 2, "High": 3})
+
+    # Encode ALL remaining string columns (catches Yes/No in any column)
+    le = LabelEncoder()
+    for col in df.columns:
+        if col == "price_range":
+            continue
+        if df[col].dtype == object:
+            df[col] = le.fit_transform(df[col].astype(str))
 
     # Feature engineering — matches derived features used in the app
     df["screen_area"]      = df["px_height"] * df["px_width"]
