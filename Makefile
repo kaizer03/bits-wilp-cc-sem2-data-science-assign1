@@ -75,17 +75,45 @@ setup: venv install
 # Launch Jupyter Notebook in the background — frees the terminal immediately
 notebook:
 	@if [ -f "$(NOTEBOOK_PID)" ] && kill -0 $$(cat "$(NOTEBOOK_PID)") 2>/dev/null; then \
-		echo "Jupyter Notebook is already running (PID $$(cat $(NOTEBOOK_PID)))."; \
-		echo "Run 'make stop-notebook' first, or open http://localhost:8888 in your browser."; \
+		JPID=$$(cat "$(NOTEBOOK_PID)"); \
+		echo "Jupyter Notebook is already running (PID $$JPID)."; \
+		echo ""; \
+		JFILE="$(HOME)/Library/Jupyter/runtime/jpserver-$$JPID.json"; \
+		if [ -f "$$JFILE" ]; then \
+			JTOKEN=$$($(PYTHON) -c "import json; d=json.load(open('$$JFILE')); print(d.get('token',''))" 2>/dev/null); \
+			JURL=$$($(PYTHON) -c "import json; d=json.load(open('$$JFILE')); print(d.get('url','').rstrip('/'))" 2>/dev/null); \
+			echo "  Open URL (with token) — copy into any browser:"; \
+			echo "  $$JURL/notebooks/Group%2013.ipynb?token=$$JTOKEN"; \
+			echo ""; \
+			echo "  Token only (paste into the browser login field):"; \
+			echo "  $$JTOKEN"; \
+		else \
+			echo "  Token URL (from log):"; \
+			echo "  $$(grep -ao 'http://[^ ]*token=[a-f0-9]*' $(NOTEBOOK_LOG) | head -1)"; \
+		fi; \
+		echo ""; \
+		echo "Stop with: make stop-notebook"; \
 	else \
 		echo "Starting Jupyter Notebook in the background..."; \
 		nohup sh -c 'cd $(WORKDIR) && exec ../$(JUPYTER) notebook "Group 13.ipynb" --no-browser --port=8888' \
 			> $(NOTEBOOK_LOG) 2>&1 & echo $$! > $(NOTEBOOK_PID); \
 		sleep 4; \
-		echo "Jupyter Notebook started (PID $$(cat $(NOTEBOOK_PID)))."; \
+		JPID=$$(cat "$(NOTEBOOK_PID)"); \
+		echo "Jupyter Notebook started (PID $$JPID)."; \
 		echo ""; \
-		echo "  Open URL (with token) — copy this into any browser:"; \
-		echo "  $$(grep -o 'http://localhost:[0-9]*/[^ ]*token=[^ ]*' $(NOTEBOOK_LOG) | head -1)"; \
+		JFILE="$(HOME)/Library/Jupyter/runtime/jpserver-$$JPID.json"; \
+		if [ -f "$$JFILE" ]; then \
+			JTOKEN=$$($(PYTHON) -c "import json; d=json.load(open('$$JFILE')); print(d.get('token',''))" 2>/dev/null); \
+			JURL=$$($(PYTHON) -c "import json; d=json.load(open('$$JFILE')); print(d.get('url','').rstrip('/'))" 2>/dev/null); \
+			echo "  Open URL (with token) — copy into any browser:"; \
+			echo "  $$JURL/notebooks/Group%2013.ipynb?token=$$JTOKEN"; \
+			echo ""; \
+			echo "  Token only (paste into the browser login field):"; \
+			echo "  $$JTOKEN"; \
+		else \
+			echo "  Token URL (from log):"; \
+			echo "  $$(grep -ao 'http://[^ ]*token=[a-f0-9]*' $(NOTEBOOK_LOG) | head -1)"; \
+		fi; \
 		echo ""; \
 		echo "Log file:  $(NOTEBOOK_LOG)"; \
 		echo "Stop with: make stop-notebook"; \
