@@ -34,40 +34,83 @@ PRICE_LABELS = {
     3: ("High Cost",         "#f59e0b", "💎"),
 }
 
+PRICE_BRACKETS = {
+    0: "~₹5,000 – ₹10,000",
+    1: "~₹10,000 – ₹20,000",
+    2: "~₹20,000 – ₹35,000",
+    3: "~₹35,000+",
+}
+
 # Sensible defaults that give the UI an alive look from the start
 DEFAULTS = dict(
-    id_val=1, battery_power=1500, ram=2500, n_cores=4, clock_speed=2.0,
-    px_height=800, px_width=1200, sc_h=12, sc_w=6, fc=8, pc=16,
-    int_memory=64, talk_time=12, m_dep=0.5, mobile_wt=2, blue=1,
-    dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
+    battery_power=1500, ram=2048, n_cores=4, clock_speed=2.0,
+    px_height=900,  px_width=1280, sc_h=12, sc_w=6,  fc=8,  pc=13,
+    int_memory=32,  talk_time=14, m_dep=0.5, mobile_wt=2,
+    blue=1, dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
 )
 
-# Demo presets — selecting one populates all inputs via session state
+# Demo presets — identical names & specs to simple-ui-prediction.py for side-by-side comparison
 PRESETS = {
     "Custom": None,
+    "📦 Budget Basic": dict(
+        battery_power=700,  ram=300,  n_cores=2, clock_speed=0.8,
+        px_height=400,  px_width=600,  sc_h=8,  sc_w=4,  fc=1,  pc=3,
+        int_memory=4,   talk_time=6,  m_dep=0.9, mobile_wt=1,
+        blue=0, dual_sim=0, four_g=0, three_g=0, touch_screen=1, wifi=0,
+    ),
     "📦 Budget Phone": dict(
-        id_val=1, battery_power=800, ram=512, n_cores=2, clock_speed=1.0,
-        px_height=480, px_width=640, sc_h=9, sc_w=5, fc=2, pc=5,
-        int_memory=8, talk_time=8, m_dep=0.8, mobile_wt=1, blue=0,
-        dual_sim=0, four_g=0, three_g=1, touch_screen=1, wifi=1,
+        battery_power=800,  ram=512,  n_cores=2, clock_speed=1.0,
+        px_height=480,  px_width=640,  sc_h=9,  sc_w=5,  fc=2,  pc=5,
+        int_memory=8,   talk_time=8,  m_dep=0.8, mobile_wt=1,
+        blue=0, dual_sim=0, four_g=0, three_g=1, touch_screen=1, wifi=1,
+    ),
+    "⚖️ Entry Mid": dict(
+        battery_power=1100, ram=1000, n_cores=4, clock_speed=1.5,
+        px_height=720,  px_width=900,  sc_h=10, sc_w=5,  fc=5,  pc=8,
+        int_memory=16,  talk_time=10, m_dep=0.7, mobile_wt=2,
+        blue=1, dual_sim=1, four_g=0, three_g=1, touch_screen=1, wifi=1,
     ),
     "⚖️ Balanced Phone": dict(
-        id_val=100, battery_power=1500, ram=2048, n_cores=4, clock_speed=2.0,
-        px_height=900, px_width=1280, sc_h=12, sc_w=6, fc=8, pc=13,
-        int_memory=32, talk_time=14, m_dep=0.5, mobile_wt=2, blue=1,
-        dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
+        battery_power=1500, ram=2048, n_cores=4, clock_speed=2.0,
+        px_height=900,  px_width=1280, sc_h=12, sc_w=6,  fc=8,  pc=13,
+        int_memory=32,  talk_time=14, m_dep=0.5, mobile_wt=2,
+        blue=1, dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
+    ),
+    "⚖️ Mid Plus": dict(
+        battery_power=1700, ram=1800, n_cores=4, clock_speed=2.0,
+        px_height=900,  px_width=1280, sc_h=11, sc_w=6,  fc=8,  pc=12,
+        int_memory=32,  talk_time=14, m_dep=0.5, mobile_wt=2,
+        blue=1, dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
+    ),
+    "✨ Upper Mid": dict(
+        battery_power=1900, ram=2600, n_cores=6, clock_speed=2.2,
+        px_height=960,  px_width=1600, sc_h=13, sc_w=7,  fc=10, pc=16,
+        int_memory=64,  talk_time=16, m_dep=0.5, mobile_wt=2,
+        blue=1, dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
     ),
     "✨ Premium Phone": dict(
-        id_val=500, battery_power=2500, ram=3500, n_cores=6, clock_speed=2.5,
-        px_height=1920, px_width=1080, sc_h=14, sc_w=7, fc=13, pc=20,
-        int_memory=64, talk_time=18, m_dep=0.4, mobile_wt=2, blue=1,
-        dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
+        battery_power=2500, ram=3500, n_cores=6, clock_speed=2.5,
+        px_height=1920, px_width=1080, sc_h=14, sc_w=7,  fc=13, pc=20,
+        int_memory=64,  talk_time=18, m_dep=0.4, mobile_wt=2,
+        blue=1, dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
+    ),
+    "✨ Premium Pro": dict(
+        battery_power=1998, ram=3800, n_cores=8, clock_speed=2.7,
+        px_height=1600, px_width=1800, sc_h=15, sc_w=7,  fc=16, pc=20,
+        int_memory=64,  talk_time=19, m_dep=0.4, mobile_wt=2,
+        blue=1, dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
     ),
     "🚀 Flagship Phone": dict(
-        id_val=999, battery_power=3500, ram=4000, n_cores=8, clock_speed=3.0,
-        px_height=2160, px_width=1440, sc_h=16, sc_w=8, fc=20, pc=20,
-        int_memory=128, talk_time=20, m_dep=0.3, mobile_wt=3, blue=1,
-        dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
+        battery_power=3500, ram=4000, n_cores=8, clock_speed=3.0,
+        px_height=2160, px_width=1440, sc_h=16, sc_w=8,  fc=20, pc=20,
+        int_memory=128, talk_time=20, m_dep=0.3, mobile_wt=3,
+        blue=1, dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
+    ),
+    "🚀 Ultra Flagship": dict(
+        battery_power=1998, ram=3998, n_cores=8, clock_speed=3.0,
+        px_height=1960, px_width=1998, sc_h=17, sc_w=8,  fc=19, pc=20,
+        int_memory=64,  talk_time=20, m_dep=0.3, mobile_wt=3,
+        blue=1, dual_sim=1, four_g=1, three_g=1, touch_screen=1, wifi=1,
     ),
 }
 
@@ -535,6 +578,123 @@ def build_interpretation(ram, battery_power, screen_area, int_memory, four_g, th
     return " ".join(parts)
 
 
+def render_price_tiers(predicted_class, probabilities=None):
+    """Return a 4-column HTML row showing all price tiers; highlights the predicted one."""
+    cards = ""
+    for cls_idx in range(4):
+        label, color, icon = PRICE_LABELS[cls_idx]
+        bracket = PRICE_BRACKETS[cls_idx]
+        is_pred = cls_idx == predicted_class
+
+        border  = f"2px solid {color}" if is_pred else "1px solid rgba(255,255,255,0.06)"
+        bg      = f"rgba(7,14,32,0.95)" if is_pred else "rgba(7,14,32,0.55)"
+        glow    = f"box-shadow:0 0 32px {color}33, inset 0 1px 0 rgba(255,255,255,0.04);" if is_pred else ""
+        opacity = "opacity:1;" if is_pred else "opacity:0.42;"
+        scale   = "transform:scale(1.04);" if is_pred else ""
+
+        prob_line = ""
+        if probabilities is not None:
+            pct = probabilities[cls_idx] * 100
+            prob_line = (
+                f'<div style="font-size:0.72rem;color:{color};font-weight:700;'
+                f'margin-top:8px;letter-spacing:0.3px;">{pct:.1f}%</div>'
+            )
+
+        badge = (
+            f'<div style="background:{color};color:#050b14;font-size:0.62rem;font-weight:800;'
+            f'letter-spacing:1.2px;text-transform:uppercase;padding:3px 10px;'
+            f'border-radius:100px;display:inline-block;margin-bottom:8px;">✓ Predicted</div>'
+            if is_pred else
+            f'<div style="font-size:0.62rem;font-weight:700;letter-spacing:1px;'
+            f'text-transform:uppercase;color:{color};opacity:0.55;margin-bottom:8px;">Class {cls_idx}</div>'
+        )
+
+        cards += f"""
+        <div style="flex:1;border:{border};border-radius:18px;padding:18px 12px;
+                    text-align:center;background:{bg};{glow}{opacity}{scale}
+                    transition:all 0.2s ease;min-height:148px;">
+            {badge}
+            <div style="font-size:2rem;margin-bottom:6px;">{icon}</div>
+            <div style="font-weight:800;font-size:0.9rem;color:{color};
+                        letter-spacing:-0.01em;line-height:1.25;">{label}</div>
+            <div style="font-size:0.74rem;color:#475569;margin-top:4px;">{bracket}</div>
+            {prob_line}
+        </div>"""
+
+    return (
+        f'<div style="display:flex;gap:12px;align-items:stretch;margin-top:1rem;">'
+        f'{cards}</div>'
+    )
+
+
+def render_feature_snapshot(
+    battery_power, ram, n_cores, clock_speed,
+    px_width, px_height, sc_w, sc_h, fc, pc,
+    int_memory, talk_time, m_dep, mobile_wt,
+    blue, dual_sim, three_g, four_g, touch_screen, wifi,
+):
+    """Return 4 grouped feature cards styled with the dashboard's dark theme."""
+    wt_map = {1: "Light", 2: "Medium", 3: "Heavy"}
+
+    def _rows(items):
+        rows = ""
+        for k, v in items:
+            rows += (
+                f'<tr>'
+                f'<td style="color:#334155;padding:3px 0;font-size:0.76rem;">{k}</td>'
+                f'<td style="color:#94a3b8;font-weight:700;text-align:right;'
+                f'padding:3px 0 3px 8px;font-size:0.76rem;">{v}</td>'
+                f'</tr>'
+            )
+        return rows
+
+    groups = [
+        ("⚙️ Core Specs", "#22d3ee", [
+            ("Battery",     f"{battery_power:,} mAh"),
+            ("RAM",         f"{ram:,} MB"),
+            ("Cores",       str(n_cores)),
+            ("Clock Speed", f"{clock_speed} GHz"),
+        ]),
+        ("🖥️ Display & Camera", "#818cf8", [
+            ("Resolution",  f"{px_width}×{px_height} px"),
+            ("Screen",      f"{sc_w}×{sc_h} cm"),
+            ("Front Cam",   f"{fc} MP"),
+            ("Primary Cam", f"{pc} MP"),
+        ]),
+        ("💾 Storage & Build", "#f472b6", [
+            ("Storage",     f"{int_memory} GB"),
+            ("Talk Time",   f"{talk_time} hrs"),
+            ("Depth",       f"{m_dep} cm"),
+            ("Weight",      wt_map.get(mobile_wt, str(mobile_wt))),
+        ]),
+        ("📡 Connectivity", "#f59e0b", [
+            ("Bluetooth",   "Yes" if blue        else "No"),
+            ("Dual SIM",    "Yes" if dual_sim    else "No"),
+            ("3G",          "Yes" if three_g     else "No"),
+            ("4G LTE",      "Yes" if four_g      else "No"),
+            ("WiFi",        "Yes" if wifi        else "No"),
+            ("Touch Screen","Yes" if touch_screen else "No"),
+        ]),
+    ]
+
+    cards = ""
+    for title, color, items in groups:
+        cards += f"""
+        <div style="flex:1;background:rgba(7,14,32,0.88);
+                    border:1px solid rgba(99,102,241,0.13);
+                    border-left:3px solid {color};
+                    border-radius:16px;padding:14px 16px;
+                    box-shadow:0 2px 14px rgba(0,0,0,0.22);">
+            <div style="font-size:0.67rem;font-weight:800;letter-spacing:1.3px;
+                        text-transform:uppercase;color:{color};opacity:0.8;
+                        margin-bottom:10px;padding-bottom:8px;
+                        border-bottom:1px solid rgba(34,211,238,0.07);">{title}</div>
+            <table style="width:100%;border-collapse:collapse;">{_rows(items)}</table>
+        </div>"""
+
+    return f'<div style="display:flex;gap:12px;align-items:stretch;">{cards}</div>'
+
+
 def render_prob_bars(probabilities, predicted_class):
     """Return custom-styled HTML for class probability bars."""
     html = '<div class="prob-container">'
@@ -713,7 +873,6 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
     st.markdown('<div class="section-header">⚙️ Core Specifications</div>', unsafe_allow_html=True)
-    id_val        = st.number_input("Mobile ID",           min_value=1,   step=1,            key="inp_id_val")
     battery_power = st.number_input("Battery Power (mAh)", min_value=0,   step=1,            key="inp_battery_power")
     ram           = st.number_input("RAM (MB)",            min_value=0,   step=1,            key="inp_ram")
     n_cores       = st.number_input("Number of Cores",     min_value=1,   step=1,            key="inp_n_cores")
@@ -820,7 +979,7 @@ if predict_clicked:
 
     # ── Build exact 23-feature input DataFrame (column order matches training) ──
     input_df = pd.DataFrame([{
-        "id":               id_val,
+        "id":               1,
         "battery_power":    battery_power,
         "blue":             blue,
         "clock_speed":      clock_speed,
@@ -870,7 +1029,12 @@ if predict_clicked:
 
     # ── Input Snapshot ───────────────────────────────────────────────────────
     st.markdown('<div class="sec-title">📋 Input Snapshot</div>', unsafe_allow_html=True)
-    st.dataframe(input_df, use_container_width=True)
+    st.markdown(render_feature_snapshot(
+        battery_power, ram, n_cores, clock_speed,
+        px_width, px_height, sc_w, sc_h, fc, pc,
+        int_memory, talk_time, m_dep, mobile_wt,
+        blue, dual_sim, three_g, four_g, touch_screen, wifi,
+    ), unsafe_allow_html=True)
 
     # ── Spec Strength Score ──────────────────────────────────────────────────
     st.markdown('<div class="sec-title">📈 Device Spec Strength</div>', unsafe_allow_html=True)
@@ -911,6 +1075,19 @@ if predict_clicked:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # ── Price Range Tier Context ─────────────────────────────────────────────
+    st.markdown('<div class="sec-title">🏷️ Price Range Context</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div style="font-size:0.72rem;color:#1e293b;margin-bottom:6px;">'
+        'All four price classes shown — predicted class highlighted. '
+        'Probability % sourced from <code>model.predict_proba()</code> where available.</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        render_price_tiers(prediction, probabilities if has_proba else None),
+        unsafe_allow_html=True,
+    )
 
     # ── Class Probability Analysis ───────────────────────────────────────────
     if has_proba:
